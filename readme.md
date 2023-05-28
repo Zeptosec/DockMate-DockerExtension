@@ -1,4 +1,4 @@
-## Docker *Better* extension (DockMate)
+## *Better* Docker extension (DockMate)
 This is a python script that extends docker library
 
 # Setup
