@@ -1,5 +1,7 @@
 import docker
 import paramiko
+from Container import Container
+from Service import Service
 
 class Swarm:
     def __init__(self) -> None:
@@ -8,14 +10,20 @@ class Swarm:
         
         #get node list
         self.nodes = self.client.nodes.list()
-    
+
+        #create list that contains containers(nodes) information
+        self.containers = []
+        for node in self.nodes:
+            container = Container(node.id, self.getNodeFreeMemory(node.id))
+            self.containers.append(container)
+
     # execute command with ssh on other server and get string lines
     def __execSSH(self, node_id: str, command: str) -> list[str]:
         node_info = self.client.nodes.get(node_id)
         ip = node_info.attrs['Status']['Addr']
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(ip, username='root', key_filename='./foo')
+        ssh.connect(ip, username='root', key_filename='/home/simbab/foo')
 
         stdin, stdout, stderr = ssh.exec_command(command)
         lines = stdout.readlines()
@@ -48,3 +56,28 @@ class Swarm:
         lines = self.__execSSH(node_id, 'free -b')
         freeb = int(lines[1].split(' ')[-1])
         return freeb
+    
+    def BFAlgorith(self, service_name: str, service_size: float):
+        #performs BF algorithm on nodes
+        new_service_size = int(service_size*(10**9))
+
+        best_pos = -1
+        for i in range(len(self.containers)):#find best position for service to add
+            if(self.getNodeFreeMemory(self.containers[i].id) >= new_service_size):
+                if best_pos == -1:
+                    best_pos = i
+                elif self.getNodeFreeMemory(self.containers[best_pos].id) > self.getNodeFreeMemory(self.containers[i].id):
+                    best_pos = i
+        
+        
+        if best_pos != -1:#found best position and service inserted into container
+            #execute ssh command
+            service = self.client.services.create(service_name, constaints=[f"node.labels.customid=={self.containers[best_pos].id}"], name=f"{service_name}", resources=docker.types.Resources(mem_limit=new_service_size, mem_reservation=new_service_size))
+            
+            service = Service(service.id, service_name, new_service_size, best_pos)
+            self.containers[best_pos].services.append(service)
+            self.containers[best_pos].free_memory -= new_service_size
+            return True
+        
+        #return false if best position was not found
+        return False
