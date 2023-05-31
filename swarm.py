@@ -1,5 +1,6 @@
 import docker
 import paramiko
+from pprint import pprint
 
 class Swarm:
     def __init__(self) -> None:
@@ -8,6 +9,17 @@ class Swarm:
         
         #get node list
         self.nodes = self.client.nodes.list()
+        self.execCommandOnNode(self.nodes[1].id, "touch /home/virgil2/veik.txt")
+        i=1
+        for node in self.nodes:
+            node_spec = {
+                'Availability': 'active',
+                'Name': f"node-{i}",
+                'Role': node.attrs['Spec']['Role'],
+                'Labels': {'customid': node.id}
+            }
+            i += 1
+            node.update(node_spec)
     
     # execute command with ssh on other server and get string lines
     def __execSSH(self, node_id: str, command: str) -> list[str]:
@@ -35,7 +47,7 @@ class Swarm:
             list[str]: List of strings that were printed when command executed
         """
         return self.__execSSH(node_id, command)
-    
+        
     
     def getNodeFreeMemory(self, node_id: str):
         """
