@@ -2,10 +2,10 @@ from swarm import Swarm
 
 mySwarm = Swarm()
 print("Before BF algorithm:")
-for node in mySwarm.nodes:
-    print(f"node: {node.id}, freeMem: {mySwarm.getNodeFreeMemory(node.id)}")
+for container in mySwarm.containers:
+    print(f"node: {container.id}, freeMem: {container.free_memory}")
 
 print(mySwarm.BFAlgorith("nginx", 1))
 print("After BF algorithm:")
-for node in mySwarm.nodes:
-    print(f"node: {node.id}, freeMem: {mySwarm.getNodeFreeMemory(node.id)}")
+for container in mySwarm.containers:
+    print(f"node: {container.id}, freeMem: {container.free_memory}")
