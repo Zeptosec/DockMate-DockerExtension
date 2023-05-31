@@ -10,20 +10,24 @@ class Swarm:
         
         #get node list
         self.nodes = self.client.nodes.list()
-
-        #create list that contains containers(nodes) information
-        self.containers = []
+        i=1
         for node in self.nodes:
-            container = Container(node.id, self.getNodeFreeMemory(node.id))
-            self.containers.append(container)
-
+            node_spec = {
+                'Availability': 'active',
+                'Name': f"node-{i}",
+                'Role': node.attrs['Spec']['Role'],
+                'Labels': {'customid': node.id}
+            }
+            i += 1
+            node.update(node_spec)
+    
     # execute command with ssh on other server and get string lines
     def __execSSH(self, node_id: str, command: str) -> list[str]:
         node_info = self.client.nodes.get(node_id)
         ip = node_info.attrs['Status']['Addr']
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(ip, username='root', key_filename='/home/simbab/foo')
+        ssh.connect(ip, username='root', key_filename='./foo')
 
         stdin, stdout, stderr = ssh.exec_command(command)
         lines = stdout.readlines()
