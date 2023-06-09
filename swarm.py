@@ -36,7 +36,7 @@ class Swarm:
         ip = node_info.attrs['Status']['Addr']
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(ip, username='root', key_filename='/home/simbab/foo')
+        ssh.connect(ip, username='root', key_filename='/home/eimis/Desktop/Dockmate/foo')
 
         stdin, stdout, stderr = ssh.exec_command(command)
         lines = stdout.readlines()
