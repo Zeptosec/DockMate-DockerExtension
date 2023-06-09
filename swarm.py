@@ -24,7 +24,7 @@ class Swarm:
         self.containers = []
         for i in range(len(self.nodes)):
             # get service info and change conatiner info acording to it.
-            container = Container(self.nodes[i].id, self.getNodeFreeMemory(self.nodes[i].id))
+            container = Container(self.nodes[i], self.getNodeFreeMemory(self.nodes[i].id))
             for service in self.client.services.list():
                 if self.nodes[i].id == service.attrs["Spec"]["Labels"]["node_id"]:
                     container.free_memory -= service.attrs["Spec"]["TaskTemplate"]["Resources"]["Limits"]["MemoryBytes"]

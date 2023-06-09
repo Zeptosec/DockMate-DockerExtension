@@ -1,6 +1,7 @@
 class Container:
-    def __init__(self, id, free_memory):
+    def __init__(self, node, free_memory):
         #initialize container
-        self.id = id
+        self.id = node.id
         self.free_memory = free_memory
         self.services = []
+        self.node = node

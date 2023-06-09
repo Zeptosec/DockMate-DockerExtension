@@ -13,9 +13,22 @@ class Item(BaseModel):
 
 @app.get("/")
 def index() -> dict[str, object]:
-    return {"nodes": [{'name': 'dd'}]}
+    values = []
+    for node in mySwarm.containers:
+        conts = []
+        values.append({
+            'id': node.id,
+            'name': node.node.attrs['Spec']['Name'],
+            'freeMemory': mySwarm.getNodeFreeMemory(node.id),
+            'totalMemory': node.node.attrs['Description']['Resources']['MemoryBytes'],
+            'role': node.node.attrs['Spec']['Role'],
+            'containers': conts
+        })
+    return {"nodes": values}
 
-
+@app.post("/")
+def createService(service) -> dict[str, object]:
+    print(service)
 # print("Before BF algorithm:")
 # for container in mySwarm.containers:
 #     print(f"node: {container.id}, freeMem: {container.free_memory}")
