@@ -1,32 +1,43 @@
+import DisplayNodes from '@/components/DisplayNodes';
 import { useEffect, useState } from 'react'
+
+const SERVER_URL = "http://localhost:8000";
+
+export interface Container {
+  service_id: string,
+  service_name: string,
+  max_service_size: number,
+  inserted_in: string
+}
+
+export interface Node {
+  id: string,
+  name: string,
+  freeMemory: number,
+  totalMemory: number,
+  role: string,
+  containers: Container[]
+}
 
 export default function Home() {
   const [textbox1, setTextbox1] = useState('');
   const [textbox2, setTextbox2] = useState('');
-  const [result, setResult] = useState('');
-  
-  const welpGG = async () => {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-    };
-
-    const response = await fetch("http://localhost:8000/api",requestOptions);
-    const data = await response.json()
-    console.log(data)
-  };
+  const [nodes, setNodes] = useState<Node[]>();
 
   useEffect(() => {
-    welpGG()
+    async function getNodes() {
+      const rs = await fetch(`${SERVER_URL}`);
+      const json = await rs.json();
+      setNodes(json.nodes);
+      console.log(json.nodes);
+    }
+    getNodes()
   }, [])
-  
+
   return (
     <main>
       <div>
-        helloWorld
+        {nodes ? <DisplayNodes nodes={nodes} /> : 'loading'}
       </div>
     </main>
   )

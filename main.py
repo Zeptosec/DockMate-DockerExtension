@@ -23,6 +23,7 @@ class Item(BaseModel):
 
 @app.get("/api")
 def index() -> dict[str, object]:
+    mySwarm.BFAlgorith('nginx', 0.3)
     return {"nodes": [{'name': str(mySwarm.containers[0].id)}]}
 
 @app.get("/")
@@ -30,14 +31,14 @@ def index() -> dict[str, object]:
 
     values = []
     for node in mySwarm.containers:
-        conts = []
+        print(node.services)
         values.append({
             'id': node.id,
             'name': node.node.attrs['Spec']['Name'],
             'freeMemory': mySwarm.getNodeFreeMemory(node.id),
             'totalMemory': node.node.attrs['Description']['Resources']['MemoryBytes'],
             'role': node.node.attrs['Spec']['Role'],
-            'containers': conts
+            'containers': node.services
         })
     return {"nodes": values}
 
