@@ -1,13 +1,33 @@
-import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
-  const [containers, setContainers] = useState(2);
+  const [textbox1, setTextbox1] = useState('');
+  const [textbox2, setTextbox2] = useState('');
+  const [result, setResult] = useState('');
+  
+  const welpGG = async () => {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+      },
 
+    };
+
+    const response = await fetch("http://localhost:8000/api",requestOptions);
+    const data = await response.json()
+    console.log(data)
+  };
+
+  useEffect(() => {
+    welpGG()
+  }, [])
   
   return (
     <main>
-     const: {containers}
+      <div>
+        helloWorld
+      </div>
     </main>
   )
 }

@@ -36,7 +36,7 @@ class Swarm:
         ip = node_info.attrs['Status']['Addr']
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(ip, username='root', key_filename='./foo')
+        ssh.connect(ip, username='root', key_filename='/home/eimis/Desktop/Dockmate/foo')
 
         stdin, stdout, stderr = ssh.exec_command(command)
         lines = stdout.readlines()
@@ -69,9 +69,6 @@ class Swarm:
         lines = self.__execSSH(node_id, 'free -b')
         freeb = int(lines[1].split(' ')[-1])
         return freeb
-    
-    def getNodes(self):
-        return self.client.nodes.list()
     
     def BFAlgorith(self, service_name: str, service_size: float):
         #performs BF algorithm on nodes
