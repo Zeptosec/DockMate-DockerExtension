@@ -1,3 +1,48 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body
+{
+  background-color:#1C262D;
+  color:white;
+  padding-left: 5%;
+  padding-top: 1%;
+}
+.break{
+  padding-top: 1%;
+  padding-bottom: 1%;
+  
+}
+.button1
+{
+  border-radius: 5%;
+  background-color: #1371C0;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  
+  font-weight: bold;
+  font-size: small;
+}
+.button2
+{
+  border-radius: 5%;
+  background-color: #7F7F76;
+  padding: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+input
+{
+  background-color: #4F4F45;
+}
+h3
+{
+  font-weight: bold;
+  font-size: larger;
+}
+input[type=number]
+{
+  color-scheme:dark;
+}
