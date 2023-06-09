@@ -1,9 +1,8 @@
 from swarm import Swarm
 from fastapi import FastAPI
 from pydantic import BaseModel
+from pprint import pprint
 mySwarm = Swarm()
-print(mySwarm)
-exit(1)
 app = FastAPI()
 
 class Item(BaseModel):
@@ -13,11 +12,8 @@ class Item(BaseModel):
 
 
 @app.get("/")
-def index() -> dict[str, dict[int, Item]]:
-    items = {
-        
-    }
-    return {"items": items}
+def index() -> dict[str, object]:
+    return {"nodes": [{'name': 'dd'}]}
 
 
 # print("Before BF algorithm:")
