@@ -33,7 +33,7 @@ class Swarm:
                     container.services.append(service)
                     container.free_memory -= service_size
             self.containers.append(container)
-
+            
     
     # execute command with ssh on other server and get string lines
     def __execSSH(self, node_id: str, command: str) -> list[str]:
@@ -77,7 +77,7 @@ class Swarm:
     
     def BFAlgorith(self, service_name: str, service_size: float):
         #performs BF algorithm on nodes
-        new_service_size = int(service_size*(10**9))
+        new_service_size = int(service_size*(10**6))
 
         best_pos = -1
         for i in range(len(self.containers)):#find best position for service to add
