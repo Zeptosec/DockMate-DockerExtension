@@ -24,6 +24,7 @@ export default function ServiceForm({ className, refetchNodes }: any) {
             const data = await response.text()
             setModalMessage(data);
             setShowModal(true);
+            await refetchNodes();
         } catch (error) {
             console.error(error)
         }
