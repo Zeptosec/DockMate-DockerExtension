@@ -1,6 +1,6 @@
 import { Node } from "@/pages";
+import { BytesToReadable } from "@/utils/utils";
 export default function DisplayNodes({ nodes }: { nodes: Node[] }) {
-
     return (
         <table className="w-full">
             <thead>
@@ -35,7 +35,7 @@ export default function DisplayNodes({ nodes }: { nodes: Node[] }) {
                                         <li key={`p${c.service_id}`} className="border-t border-[#323B41]">
                                             <td className="p-4">{c.service_id}</td>
                                             <td className="p-4">{c.service_name}</td>
-                                            <td className="p-4">{c.max_service_size}</td>
+                                            <td className="p-4">{BytesToReadable(c.max_service_size)}</td>
                                         </li>
                                     )}
                                 </ul>
