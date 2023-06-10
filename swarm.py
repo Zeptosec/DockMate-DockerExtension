@@ -27,8 +27,13 @@ class Swarm:
             container = Container(self.nodes[i], self.getNodeFreeMemory(self.nodes[i].id))
             for service in self.client.services.list():
                 if self.nodes[i].id == service.attrs["Spec"]["Labels"]["node_id"]:
-                    container.free_memory -= service.attrs["Spec"]["TaskTemplate"]["Resources"]["Limits"]["MemoryBytes"]
+                    service_name = service.attrs["Spec"]["Name"]
+                    service_size = service.attrs["Spec"]["TaskTemplate"]["Resources"]["Limits"]["MemoryBytes"]
+                    service = Service(service.id, service_name, service_size, self.nodes[i].id)
+                    container.services.append(service)
+                    container.free_memory -= service_size
             self.containers.append(container)
+
     
     # execute command with ssh on other server and get string lines
     def __execSSH(self, node_id: str, command: str) -> list[str]:
