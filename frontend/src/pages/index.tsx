@@ -1,6 +1,7 @@
 import DisplayNodes from '@/components/DisplayNodes';
 import ServiceForm from '@/components/ServiceForm';
 import { useEffect, useState } from 'react'
+import Image from 'next/image';
 
 const SERVER_URL = "http://localhost:8000";
 
@@ -36,13 +37,14 @@ export default function Home() {
 
   return (
     <main>
-      <div className='max-w-[1400px] flex-col m-auto flex p-4 gap-6'>
-
-        {nodes ? <DisplayNodes nodes={nodes} /> : 'loading'}
-        <ServiceForm
-          className="max-w-[400px] text-white m-auto"
-          refetchNodes={getNodes}
-        />
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="flex gap-2">
+          <ServiceForm className="max-w-md mb-8" refetchNodes={getNodes} />
+          <div className="relative grow rounded-3xl">
+            <Image className="rounded-3xl" src="/Logo.png" alt="Logo" fill={true} />
+          </div>
+        </div>
+        {nodes ? <DisplayNodes nodes={nodes} /> : 'Loading...'}
       </div>
     </main>
   );
