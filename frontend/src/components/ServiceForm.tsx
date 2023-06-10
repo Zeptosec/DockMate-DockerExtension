@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function ServiceForm({ className }: any) {
+export default function ServiceForm({ className, refetchNodes }: any) {
     const [textbox1, setTextbox1] = useState('');
     const [textbox2, setTextbox2] = useState(42);
     const [showModal, setShowModal] = useState(false);
@@ -24,6 +24,7 @@ export default function ServiceForm({ className }: any) {
             const data = await response.text()
             setModalMessage(data);
             setShowModal(true);
+            await refetchNodes();
         } catch (error) {
             console.error(error)
         }
@@ -60,7 +61,7 @@ export default function ServiceForm({ className }: any) {
                         max={1280000}
                         className="w-full text-black border border-gray-300 text-black rounded px-3 py-2"
                         value={textbox2}
-                        onChange={(e) => setTextbox2(e.target.value)}
+                        onChange={(e) => setTextbox2(parseFloat(e.target.value))}
                     />
                 </div>
                 <button
