@@ -17,14 +17,17 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
-class Item(BaseModel):
-    name: str
-    requiredMemory: int
 
-@app.get("/api")
-def index() -> dict[str, object]:
-    mySwarm.BFAlgorith('nginx', 0.3)
-    return {"nodes": [{'name': str(mySwarm.containers[0].id)}]}
+class RequestServiceData(BaseModel):
+    appName: str
+    size: float
+
+@app.post("/create")
+async def addService(request: RequestServiceData):
+    if (mySwarm.BFAlgorith(request.appName, request.size) != False):
+        return "Added"
+    else:
+        return "NotAdded"
 
 @app.get("/")
 def index() -> dict[str, object]:
