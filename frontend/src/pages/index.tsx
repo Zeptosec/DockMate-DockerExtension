@@ -24,23 +24,25 @@ export default function Home() {
 
   const [nodes, setNodes] = useState<Node[]>();
 
-
+  async function getNodes() {
+    const rs = await fetch(`${SERVER_URL}`);
+    const json = await rs.json();
+    setNodes(json.nodes);
+    console.log(json.nodes);
+  }
   useEffect(() => {
-    async function getNodes() {
-      const rs = await fetch(`${SERVER_URL}`);
-      const json = await rs.json();
-      setNodes(json.nodes);
-      console.log(json.nodes);
-    }
     getNodes()
   }, [])
 
   return (
     <main>
-      <div className='max-w-[1400px] p-4 grid gap-6'>
-        
+      <div className='max-w-[1400px] flex-col m-auto flex p-4 gap-6'>
+
         {nodes ? <DisplayNodes nodes={nodes} /> : 'loading'}
-        <ServiceForm className="max-w-[400px] text-white m-auto" />
+        <ServiceForm
+          className="max-w-[400px] text-white m-auto"
+          refetchNodes={getNodes}
+        />
       </div>
     </main>
   );
