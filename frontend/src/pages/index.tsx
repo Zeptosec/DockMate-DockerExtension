@@ -44,7 +44,7 @@ export default function Home() {
             <Image className="rounded-3xl" src="/Logo.png" alt="Logo" fill={true} />
           </div>
         </div>
-        {nodes ? <DisplayNodes nodes={nodes} /> : 'Loading...'}
+        {nodes ? <DisplayNodes nodes={nodes} refetchNodes={getNodes}  /> : 'Loading...'}
       </div>
     </main>
   );

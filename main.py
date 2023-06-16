@@ -22,23 +22,32 @@ class RequestServiceData(BaseModel):
     appName: str
     size: float
 
+class RequestServiceRemoveData(BaseModel):
+    serviceID: str
+    nodeID: str
+
+
 @app.post("/create")
 async def addService(request: RequestServiceData):
     if (mySwarm.BFAlgorith(request.appName, request.size) != False):
         return "Added"
     else:
         return "NotAdded"
+    
+@app.post("/remove")
+async def removeService(request: RequestServiceRemoveData):
+    mySwarm.remove(request.serviceID, request.nodeID)
+
 
 @app.get("/")
 def index() -> dict[str, object]:
 
     values = []
     for node in mySwarm.containers:
-        print(node.services)
         values.append({
             'id': node.id,
             'name': node.node.attrs['Spec']['Name'],
-            'freeMemory': mySwarm.getNodeFreeMemory(node.id),
+            'freeMemory': node.free_memory,
             'totalMemory': node.node.attrs['Description']['Resources']['MemoryBytes'],
             'role': node.node.attrs['Spec']['Role'],
             'containers': node.services

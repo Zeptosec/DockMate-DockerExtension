@@ -23,12 +23,12 @@ class Swarm:
 
         self.containers = []
         for i in range(len(self.nodes)):
-            # get service info and change conatiner info acording to it.
+            # get service info and change container info acording to it.
             container = Container(self.nodes[i], self.getNodeFreeMemory(self.nodes[i].id))
             for service in self.client.services.list():
                 if self.nodes[i].id == service.attrs["Spec"]["Labels"]["node_id"]:
                     service_name = service.attrs["Spec"]["Name"]
-                    service_size = service.attrs["Spec"]["TaskTemplate"]["Resources"]["Limits"]["MemoryBytes"]
+                    service_size = service.attrs["Spec"]["TaskTemplate"]["Resources"]["Limits"]["MemoryBytes"]              
                     service = Service(service.id, service_name, service_size, self.nodes[i].id)
                     container.services.append(service)
                     container.free_memory -= service_size
@@ -99,3 +99,13 @@ class Swarm:
         
         #return false if best position was not found
         return False
+    
+    def remove(self, service_id: str, node_id: str):
+        for container in self.containers:
+            if container.id == node_id:
+                for service in container.services:
+                    if service.service_id == service_id:
+                        container.free_memory += service.max_service_size
+                        self.client.services.get(service_id).remove()
+                        container.services.remove(service)
+                        
